@@ -17,7 +17,7 @@
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
 #include"utilities/input_handling.h"
-#include"libs/glm-master/glm/glm.hpp"
+#include"libs/glm/glm.hpp"
 
 int main() {
     if(!glfwInit()){
