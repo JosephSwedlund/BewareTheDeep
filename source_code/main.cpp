@@ -17,6 +17,7 @@
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
 #include"utilities/input_handling.h"
+#include"libs/glm-master/glm/glm.hpp"
 
 int main() {
     if(!glfwInit()){
@@ -30,22 +31,45 @@ int main() {
  
     GLFWwindow* window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, glfwGetPrimaryMonitor(), nullptr);
     
-
+    // Checking for fullscreen
     if(!fullscreen) {
          glfwSetWindowMonitor(window, nullptr, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 60);
     }
 
+    
     glfwMakeContextCurrent(window);
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+    
+    // Activating user input
     glfwSetKeyCallback(window, key_action);
     glfwSetCursorPosCallback(window, cursor_position_changed);
     glfwSetMouseButtonCallback(window, mouse_button_clicked);
 
+    // Setting up glViewport
     glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 
+    
+    // Rectangle Data
+    float rectangle_data[] = {
+        -0.5f, -0.5f, +0.0f,
+        +0.0f, +0.5f, +0.0f,
+        +0.5f, -0.5f, +0.0f,
+    };
+
+    
 
 
-while(!glfwWindowShouldClose(window)){
+    //Creating Buffers
+    uint32_t vao;
+    glGenBuffers(1, &vao);
+    glBindBuffer(GL_ARRAY_BUFFER, vao);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(float)*9, &rectangle_data[0], GL_DYNAMIC_DRAW);
+    
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+
+    while(!glfwWindowShouldClose(window)){
         
         if(key_is_held[GLFW_KEY_W]){
             glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
@@ -62,6 +86,8 @@ while(!glfwWindowShouldClose(window)){
         
         glClear(GL_COLOR_BUFFER_BIT);
 
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+        
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
