@@ -19,14 +19,13 @@
 #include"utilities/input_handling.h"
 #include"utilities/window_managing.h"
 #include"libs/glm/glm.hpp"
+#include"systems/cube.h"
 
 int main() {
     if(!glfwInit()){
 		return -1;
 	}
     
-    window_size_x = 500;
-    window_size_y = 500;
     bool fullscreen = false;
     const char* WINDOW_TITLE = "BewareTheDeep";
     
@@ -50,13 +49,6 @@ int main() {
     // Setting up glViewport
     glViewport(0, 0, window_size_x, window_size_y);
 
-    
-    // Rectangle Data
-    float rectangle_data[] = {
-        -0.5f, -0.5f, +0.0f,
-        +0.0f, +0.5f, +0.0f,
-        +0.5f, -0.5f, +0.0f,
-    };
 
     //Creating Buffers
     uint32_t vao;
@@ -72,7 +64,6 @@ int main() {
 
         rectangle_data[0] = normalized_mouse_cursor_x;        
         rectangle_data[1] = normalized_mouse_cursor_y;        
-        glViewport(0, 0, window_size_x, window_size_y);
         glBufferData(GL_ARRAY_BUFFER, sizeof(float)*9, &rectangle_data[0], GL_DYNAMIC_DRAW);
         
         if(key_is_held[GLFW_KEY_W]){
