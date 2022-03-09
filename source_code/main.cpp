@@ -17,6 +17,7 @@
 #include<glad/glad.h>
 #include<GLFW/glfw3.h>
 #include"utilities/input_handling.h"
+#include"utilities/window_managing.h"
 #include"libs/glm/glm.hpp"
 
 int main() {
@@ -24,16 +25,16 @@ int main() {
 		return -1;
 	}
     
+    window_size_x = 500;
+    window_size_y = 500;
     bool fullscreen = false;
-	const short WINDOW_HEIGHT = 700;
-	const short WINDOW_WIDTH = 900;
     const char* WINDOW_TITLE = "BewareTheDeep";
- 
-    GLFWwindow* window = glfwCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, WINDOW_TITLE, glfwGetPrimaryMonitor(), nullptr);
+    
+    GLFWwindow* window = glfwCreateWindow(window_size_x, window_size_y, WINDOW_TITLE, glfwGetPrimaryMonitor(), nullptr);
     
     // Checking for fullscreen
     if(!fullscreen) {
-         glfwSetWindowMonitor(window, nullptr, 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, 60);
+         glfwSetWindowMonitor(window, nullptr, 0, 0, window_size_x, window_size_y, 60);
     }
 
     
@@ -44,9 +45,10 @@ int main() {
     glfwSetKeyCallback(window, key_action);
     glfwSetCursorPosCallback(window, cursor_position_changed);
     glfwSetMouseButtonCallback(window, mouse_button_clicked);
-
+    glfwSetWindowSizeCallback(window, window_resized);
+    
     // Setting up glViewport
-    glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+    glViewport(0, 0, window_size_x, window_size_y);
 
     
     // Rectangle Data
@@ -56,20 +58,22 @@ int main() {
         +0.5f, -0.5f, +0.0f,
     };
 
-    
-
-
     //Creating Buffers
     uint32_t vao;
     glGenBuffers(1, &vao);
     glBindBuffer(GL_ARRAY_BUFFER, vao);
     glBufferData(GL_ARRAY_BUFFER, sizeof(float)*9, &rectangle_data[0], GL_DYNAMIC_DRAW);
     
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float)*3, (void*)0);
     glEnableVertexAttribArray(0);
 
 
     while(!glfwWindowShouldClose(window)){
+
+        rectangle_data[0] = normalized_mouse_cursor_x;        
+        rectangle_data[1] = normalized_mouse_cursor_y;        
+        glViewport(0, 0, window_size_x, window_size_y);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(float)*9, &rectangle_data[0], GL_DYNAMIC_DRAW);
         
         if(key_is_held[GLFW_KEY_W]){
             glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
