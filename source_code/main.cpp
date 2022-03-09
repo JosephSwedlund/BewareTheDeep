@@ -22,22 +22,12 @@
 #include"systems/cube.h"
 
 int main() {
-    if(!glfwInit()){
-		return -1;
-	}
-    
-    bool fullscreen = false;
-    const char* WINDOW_TITLE = "BewareTheDeep";
-    
-    GLFWwindow* window = glfwCreateWindow(window_size_x, window_size_y, WINDOW_TITLE, glfwGetPrimaryMonitor(), nullptr);
-    
-    // Checking for fullscreen
-    if(!fullscreen) {
-         glfwSetWindowMonitor(window, nullptr, 0, 0, window_size_x, window_size_y, 60);
-    }
 
-    
-    glfwMakeContextCurrent(window);
+    // Create GLFW instance/window and set it as current contxt. 
+    GLFWwindow* window =  window_init_and_create();
+
+    // Update Fullscreen-ness and activate the OpenGL functions
+    window_update_fullscreen(window);
     gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
     
     // Activating user input
@@ -66,11 +56,8 @@ int main() {
         rectangle_data[1] = normalized_mouse_cursor_y;        
         glBufferData(GL_ARRAY_BUFFER, sizeof(float)*9, &rectangle_data[0], GL_DYNAMIC_DRAW);
         
-        if(key_is_held[GLFW_KEY_W]){
-            glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-            if(mouse_button_is_held[GLFW_MOUSE_BUTTON_1]) {
+        if(mouse_button_is_held[GLFW_MOUSE_BUTTON_1]) {
                 glClearColor(0.0f, 0.0f, 0.0f, 1.0f);    
-            }
         }
         else if(mouse_button_is_held[GLFW_MOUSE_BUTTON_2]) {
             glClearColor(1.0f, 1.0f, 1.0f, 1.0f);

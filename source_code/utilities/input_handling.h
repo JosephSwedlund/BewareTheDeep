@@ -31,6 +31,12 @@ void key_action(GLFWwindow* window, int key, int scancode, int action, int mods)
         if(((action == GLFW_PRESS) || (key_is_held[key])) && (action != GLFW_RELEASE)) std::cout << key << " held.\n";
    #endif
 
+    // Toggle Fullscreen with key 80 (P)
+    if(action = GLFW_PRESS && action != GLFW_RELEASE  && key == 80) {
+        fullscreen = !fullscreen;
+        window_update_fullscreen(window);
+    }
+
     key_is_pressed[key] = (action == GLFW_PRESS); 
     key_is_released[key] = (action == GLFW_RELEASE);
     key_is_held[key] = ( ((action == GLFW_PRESS) || (key_is_held[key])) && (action != GLFW_RELEASE));

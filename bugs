@@ -1,0 +1,1 @@
+look into using key_pressed[GLFW_KEY] in the game loop acting like key_held[GLFW_KEY]
